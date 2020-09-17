@@ -1,39 +1,36 @@
 import React, { useState } from 'react'
-import { TimeSplit } from './typings/global'
-import { tick } from './utils/time'
-import { useCssHandles } from "vtex.css-handles"
+import { useCssHandles } from 'vtex.css-handles'
 import { useQuery } from 'react-apollo'
-import productReleaseDate from './queries/productReleaseDate.graphql'
 import { useProduct } from 'vtex.product-context'
 
-
+import { TimeSplit } from './typings/global'
+import { tick } from './utils/time'
+import productReleaseDate from './queries/productReleaseDate.graphql'
 
 interface CountdownProps {
   targetDate: string
 }
 
-const CSS_HANDLES = [ "countdown"]
+const CSS_HANDLES = ['countdown']
 
-  const productContextValue  = useProduct()
+const productContextValue = useProduct()
 
 const { data, loading, error } = useQuery(productReleaseDate, {
-    variables: {
-      slug: productContextValue?.product?.linkText
-    },
-    ssr: false
-  })
+  variables: {
+    slug: productContextValue?.product?.linkText,
+  },
+  ssr: false,
+})
 
 const Countdown: StorefrontFunctionComponent<CountdownProps> = () => {
-
   const [timeRemaining, setTime] = useState<TimeSplit>({
-         hours: '00',
-         minutes: '00',
-         seconds: '00'
-       })
+    hours: '00',
+    minutes: '00',
+    seconds: '00',
+  })
 
   const handles = useCssHandles(CSS_HANDLES)
-
-  +tick(data?.product?.releaseDate, setTime)
+  tick(data?.product?.releaseDate, setTime)
 
   if (!productContextValue) {
     return (
@@ -61,8 +58,8 @@ const Countdown: StorefrontFunctionComponent<CountdownProps> = () => {
   return (
     <div className={`${handles.countdown} db tc`}>
       {`${timeRemaining.hours}:${timeRemaining.minutes}:${timeRemaining.seconds}`}
-  </div>
-)
+    </div>
+  )
 }
 
 Countdown.schema = {
@@ -71,12 +68,12 @@ Countdown.schema = {
   type: 'object',
   properties: {
     targetDate: {
-        title: 'Final date',
-        description: 'Final date used in the countdown',
-        type: 'string',
-        default: null,
-      }
-  }
+      title: 'Final date',
+      description: 'Final date used in the countdown',
+      type: 'string',
+      default: null,
+    },
+  },
 }
 
 export default Countdown
