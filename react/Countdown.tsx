@@ -1,8 +1,8 @@
 import React from 'react'
 
-interface CountdownProps { }
+interface CountdownProps {}
 
-const Countdown: StorefrontFunctionComponent<CountdownProps> = ({ }) => {
+const Countdown: StorefrontFunctionComponent<CountdownProps> = ({}) => {
   return <div></div>
 }
 
